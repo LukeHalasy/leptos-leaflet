@@ -32,7 +32,7 @@ pub fn Circle(
     #[prop(into, optional)] popup_events: PopupEvents,
     #[prop(into, optional)] tooltip_events: TooltipEvents,
 
-    #[prop(into)] radius: MaybeSignal<f64>,
+    #[prop(into)] radius: LeafletMaybeSignal<f64>,
     #[prop(optional)] children: Option<Children>,
 ) -> impl IntoView {
     let overlay_context = extend_context_with_overlay();
@@ -49,6 +49,7 @@ pub fn Circle(
             setup_layer_leaflet_option!(stroke, options);
             setup_layer_leaflet_option_ref!(color, options);
             setup_layer_leaflet_option!(weight, options);
+            setup_layer_leaflet_option!(radius, options);
             setup_layer_leaflet_option!(opacity, options);
             setup_layer_leaflet_option!(interactive, options);
             setup_layer_leaflet_option_ref!(line_cap, options);
@@ -75,15 +76,15 @@ pub fn Circle(
         };
     });
 
-    let radius_stop = watch(
-        move || radius.get(),
-        move |radius, _, _| {
-            if let Some(polygon) = overlay.get_value() {
-                polygon.setRadius(*radius);
-            }
-        },
-        false,
-    );
+    // let radius_stop = watch(
+    //     move || radius.get(),
+    //     move |radius, _, _| {
+    //         if let Some(polygon) = overlay.get_value() {
+    //             polygon.setRadius(*radius);
+    //         }
+    //     },
+    //     false,
+    // );
 
     let stroke_stop = watch(
         move || stroke.get(),
@@ -158,7 +159,7 @@ pub fn Circle(
     );
 
     on_cleanup(move || {
-        radius_stop();
+        // radius_stop();
         stroke_stop();
         color_stop();
         fill_color_stop();

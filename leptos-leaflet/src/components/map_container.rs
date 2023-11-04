@@ -19,6 +19,9 @@ pub fn MapContainer(
     /// Zoom level of the map. Defaults to 10.0
     #[prop(optional, default = 10.0)]
     zoom: f64,
+    // Max zoom level
+    #[prop(optional)] max_zoom: Option<f64>,
+    #[prop(optional)] min_zoom: Option<f64>,
     /// Use geolocation from the browser to track the user
     #[prop(optional)]
     locate: bool,
@@ -58,6 +61,13 @@ pub fn MapContainer(
             let map_div = map_div.unchecked_ref::<HtmlDivElement>();
             let mut options = leaflet::MapOptions::new();
             options.zoom(zoom);
+            if let Some(max_zoom) = max_zoom {
+                options.max_zoom(max_zoom);
+            }
+            if let Some(min_zoom) = min_zoom {
+                options.min_zoom(min_zoom);
+            }
+
             if let Some(center) = center {
                 options.center(&center.into());
             }
